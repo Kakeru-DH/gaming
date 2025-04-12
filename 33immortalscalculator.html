@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora 33 Immortals</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background-color: #2e2e4f;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffd700;
+      margin-bottom: 15px;
+    }
+
+    p {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4e4e6f;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px;
+      width: 100%;
+      background-color: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e6c200;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #3e3e5f;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      input[type="number"],
+      button {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Atributos</h1>
+    <p>Preencha os campos abaixo para calcular os atributos do seu personagem.</p>
+
+    <label for="ataque">Ataque:</label>
+    <input type="number" id="ataque" placeholder="Insira o valor de ataque">
+
+    <label for="vitalidade">Vitalidade:</label>
+    <input type="number" id="vitalidade" placeholder="Insira o valor de vitalidade">
+
+    <label for="empatia">Empatia:</label>
+    <input type="number" id="empatia" placeholder="Insira o valor de empatia">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div id="resultado">
+      <p>O resultado aparecerá aqui.</p>
+    </div>
+  </div>
+
+  <script>
+    function calcular() {
+      const ataque = document.getElementById('ataque').value;
+      const vitalidade = document.getElementById('vitalidade').value;
+      const empatia = document.getElementById('empatia').value;
+
+      const resultado = `
+        <strong>Seus Atributos:</strong><br>
+        Ataque: ${ataque}<br>
+        Vitalidade: ${vitalidade}<br>
+        Empatia: ${empatia}
+      `;
+
+      document.getElementById('resultado').innerHTML = resultado;
+    }
+  </script>
+</body>
+</html>
