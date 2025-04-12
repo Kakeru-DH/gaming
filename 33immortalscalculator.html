@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,23 +14,37 @@
 
     body {
       font-family: 'Cinzel', serif;
-      background-color: #0e0e1a;
       color: #e0d7ff;
       padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative;
     }
 
-    .container, .intro-screen {
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0e0e1a url('https://raw.githubusercontent.com/Kakeru-DH/gaming/refs/heads/main/33_IMMORTALS-1024x1107.png') no-repeat center center;
+      background-size: cover;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .container, .intro-screen, .equipment-screen {
       width: 100%;
-      max-width: 500px;
+      max-width: 800px;
       background: linear-gradient(145deg, #1a0d2e, #2c1a4d);
       padding: 25px;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(144, 0, 255, 0.4);
       display: none;
+      position: relative;
+      z-index: 1;
     }
 
     .intro-screen {
@@ -41,10 +54,125 @@
       text-align: center;
     }
 
-    h1 {
+    .intro-screen::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: -1;
+      border-radius: 10px;
+    }
+
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .weapon-selection, .relics-section, .advantages-section, .upgrades-section {
+      background-color: rgba(58, 46, 79, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #a259ff;
+    }
+
+    .weapon-selection {
+      grid-column: span 2;
+    }
+
+    .weapon-options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .weapon-option {
+      position: relative;
+      cursor: pointer;
+      flex: 1;
+      margin: 0 5px;
+      transition: all 0.3s;
+      height: 120px;
+    }
+
+    .weapon-option::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://github.com/Kakeru-DH/gaming/blob/main/MOLDURA%20Arma.png?raw=true');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+    }
+
+    .weapon-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 80%;
+      max-height: 80%;
+      z-index: 2;
+    }
+
+    .weapon-option.selected {
+      filter: drop-shadow(0 0 10px rgba(162, 89, 255, 0.7));
+    }
+
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .advantage-slot, .upgrade-slot, .relic-slot {
+      background-color: #3a2e4f;
+      height: 60px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .advantage-slot:hover, .upgrade-slot:hover, .relic-slot:hover {
+      background-color: #4e3e66;
+    }
+
+    .upgrades-section {
+      grid-column: span 2;
+    }
+
+    .upgrades-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .relics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    h1, h2 {
       text-align: center;
       color: #c49cff;
       margin-bottom: 15px;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
     }
 
     p {
@@ -96,20 +224,113 @@
       font-size: 1rem;
     }
 
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.7rem;
+      color: rgba(224, 215, 255, 0.6);
+      z-index: 2;
+    }
+
     @media (max-width: 600px) {
-      input[type="number"],
-      button {
-        font-size: 1rem;
+      .equipment-grid {
+        grid-template-columns: 1fr;
+      }
+      .weapon-selection, .upgrades-section {
+        grid-column: span 1;
+      }
+      .weapon-options {
+        flex-direction: column;
+        align-items: center;
+      }
+      .weapon-option {
+        width: 80%;
+        margin: 10px 0;
+      }
+      .advantages-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .relics-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
 </head>
 <body>
+  <!-- Imagem de fundo desfocada -->
+  <div class="background-image"></div>
 
   <!-- Tela de boas-vindas -->
   <div class="intro-screen" id="intro">
     <h1>Você está pronto para começar sua jornada?</h1>
     <button onclick="comecarJornada()">Sim</button>
+  </div>
+
+  <!-- Tela de seleção de equipamentos -->
+  <div class="equipment-screen" id="equipment">
+    <h1>Seleção de Equipamentos</h1>
+    
+    <div class="equipment-grid">
+      <!-- Seleção de Arma -->
+      <div class="weapon-selection">
+        <h2>Selecione sua Arma</h2>
+        <div class="weapon-options">
+          <div class="weapon-option" onclick="selectWeapon(this, 'Adagas')">
+            <img src="https://github.com/Kakeru-DH/gaming/blob/main/Adagas%20(1).png?raw=true" class="weapon-image" alt="Adagas">
+          </div>
+          <div class="weapon-option" onclick="selectWeapon(this, 'Espada')">
+            <img src="https://github.com/Kakeru-DH/gaming/blob/main/Espada%20(1).png?raw=true" class="weapon-image" alt="Espada">
+          </div>
+          <div class="weapon-option" onclick="selectWeapon(this, 'Cajado')">
+            <img src="https://github.com/Kakeru-DH/gaming/blob/main/Cajado%20(1).png?raw=true" class="weapon-image" alt="Cajado">
+          </div>
+          <div class="weapon-option" onclick="selectWeapon(this, 'Arco')">
+            <img src="https://github.com/Kakeru-DH/gaming/blob/main/Arco%20(1).png?raw=true" class="weapon-image" alt="Arco">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vantagens (6 slots) -->
+      <div class="advantages-section">
+        <h2>Vantagens (0/6)</h2>
+        <div class="advantages-grid">
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 1</div>
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 2</div>
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 3</div>
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 4</div>
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 5</div>
+          <div class="advantage-slot" onclick="selectAdvantage(this)">Vantagem 6</div>
+        </div>
+      </div>
+      
+      <!-- Aprimoramentos (2 slots) -->
+      <div class="upgrades-section">
+        <h2>Aprimoramentos de Arma (0/2)</h2>
+        <div class="upgrades-grid">
+          <div class="upgrade-slot" onclick="selectUpgrade(this)">Aprimoramento 1</div>
+          <div class="upgrade-slot" onclick="selectUpgrade(this)">Aprimoramento 2</div>
+        </div>
+      </div>
+      
+      <!-- Relíquias (8 slots) -->
+      <div class="relics-section">
+        <h2>Relíquias (0/8)</h2>
+        <div class="relics-grid">
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 1</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 2</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 3</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 4</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 5</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 6</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 7</div>
+          <div class="relic-slot" onclick="selectRelic(this)">Relíquia 8</div>
+        </div>
+      </div>
+    </div>
+    
+    <button onclick="avancarParaCalculadora()">Avançar para Cálculo</button>
   </div>
 
   <!-- Tela principal da calculadora -->
@@ -133,6 +354,11 @@
     </div>
   </div>
 
+  <!-- Rodapé -->
+  <footer>
+    Feito de fã para fã! Desenvolvido por @thunderlotus
+  </footer>
+
   <script>
     window.onload = function () {
       document.getElementById('intro').style.display = 'flex';
@@ -140,7 +366,37 @@
 
     function comecarJornada() {
       document.getElementById('intro').style.display = 'none';
+      document.getElementById('equipment').style.display = 'block';
+    }
+
+    function avancarParaCalculadora() {
+      document.getElementById('equipment').style.display = 'none';
       document.getElementById('calculadora').style.display = 'block';
+    }
+
+    function selectWeapon(element, weapon) {
+      // Remove seleção anterior
+      const options = document.querySelectorAll('.weapon-option');
+      options.forEach(opt => opt.classList.remove('selected'));
+      
+      // Seleciona nova arma
+      element.classList.add('selected');
+      console.log('Arma selecionada:', weapon);
+    }
+
+    function selectAdvantage(element) {
+      console.log('Vantagem clicada:', element.textContent);
+      // Aqui você pode adicionar lógica para selecionar vantagens
+    }
+
+    function selectUpgrade(element) {
+      console.log('Aprimoramento clicado:', element.textContent);
+      // Aqui você pode adicionar lógica para selecionar aprimoramentos
+    }
+
+    function selectRelic(element) {
+      console.log('Relíquia clicada:', element.textContent);
+      // Aqui você pode adicionar lógica para selecionar relíquias
     }
 
     function calcular() {
@@ -158,6 +414,5 @@
       document.getElementById('resultado').innerHTML = resultado;
     }
   </script>
-
 </body>
 </html>
